@@ -1,0 +1,569 @@
+/* Wallpaper (photos, or drawn hills with the owner's name), desktop icons, selection,
+   widgets, and the phone home screen + status bar. */
+#wallpaper {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #3f86c6;
+}
+
+/* ---- Photo wallpapers (CC0, see README) --------------------------------------------- */
+
+.wall-photo {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+#wallpaper[data-wall='tahoe'] .wall-photo {
+  background-image: url('../assets/wallpapers/tahoe-shore.jpg');
+  opacity: 1;
+}
+
+#wallpaper[data-wall='bay'] .wall-photo {
+  background-image: url('../assets/wallpapers/emerald-bay.jpg');
+  background-position: center 60%;
+  opacity: 1;
+}
+
+/* Photos dim slightly in dark mode, like macOS dynamic wallpapers at night. */
+.wall-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: var(--photo-dim, 0);
+  transition: opacity 600ms ease;
+}
+
+:root[data-theme='dark'] .wall-photo {
+  --photo-dim: 0.28;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .wall-photo {
+    --photo-dim: 0.28;
+  }
+}
+
+/* ---- Drawn wallpaper: layered hills with the name set into the landscape ------------ */
+
+#wallpaper:not([data-wall='hills']) .wall-hills {
+  display: none;
+}
+
+.wall-hills {
+  position: absolute;
+  inset: 0;
+  background: var(--sky);
+}
+
+.wall-stars {
+  position: absolute;
+  inset: 0;
+  opacity: var(--stars-opacity);
+  background-image:
+    radial-gradient(1px 1px at 23px 41px, #fff, transparent),
+    radial-gradient(1px 1px at 91px 133px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1.5px 1.5px at 157px 77px, #fff, transparent),
+    radial-gradient(1px 1px at 211px 181px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 263px 29px, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1.2px 1.2px at 47px 207px, rgba(255, 255, 255, 0.7), transparent);
+  background-size: 290px 230px;
+  -webkit-mask-image: linear-gradient(#000 0 40%, transparent 72%);
+  mask-image: linear-gradient(#000 0 40%, transparent 72%);
+}
+
+.wall-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(55% 42% at 62% 80%, var(--glow), transparent 72%);
+}
+
+.hill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  width: 100%;
+}
+
+.hill-3 {
+  height: 54vh;
+}
+
+.hill-2 {
+  height: 41vh;
+}
+
+.hill-1 {
+  height: 27vh;
+  min-height: 150px;
+}
+
+.wall-name {
+  position: absolute;
+  left: 50%;
+  bottom: 14vh;
+  transform: translateX(-50%);
+  font: 800 clamp(80px, 19vw, 340px) / 0.8 var(--font-display);
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  color: transparent;
+  background: var(--name-fill);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.18));
+  pointer-events: none;
+}
+
+/* ---- Desktop ------------------------------------------------------------------------ */
+
+#desktop {
+  position: fixed;
+  inset: 0;
+}
+
+#icons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+#windows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.d-icon {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 96px;
+  padding: 4px 2px;
+  border: 0;
+  background: none;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.d-img {
+  position: relative;
+  padding: 3px;
+  border-radius: 7px;
+  line-height: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.28));
+}
+
+/* The alias arrow, bottom-left, as on real macOS aliases. */
+.d-alias {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M5 11L11 5M6.5 5H11v4.5' fill='none' stroke='%23111' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 12px no-repeat;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.3);
+}
+
+.d-label {
+  max-width: 92px;
+  padding: 1px 5px 2px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), 0 0 1px rgba(0, 0, 0, 0.5);
+  overflow-wrap: anywhere;
+}
+
+.d-icon.is-selected .d-img {
+  background: rgba(0, 0, 0, 0.26);
+}
+
+.d-icon.is-selected .d-label {
+  background: var(--accent);
+  text-shadow: none;
+}
+
+.d-icon:focus-visible {
+  outline: none;
+}
+
+.d-icon:focus-visible .d-label {
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.d-icon.is-dragging {
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.d-band {
+  position: absolute;
+  z-index: 0;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+
+/* ---- Widgets: macOS sizes (small 158pt, medium 338pt) ------------------------------- */
+
+#widgets {
+  position: absolute;
+  top: calc(var(--menubar-h) + 18px);
+  left: 20px;
+  display: grid;
+  gap: 18px;
+}
+
+.widget-row {
+  display: flex;
+  gap: 18px;
+}
+
+.widget {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.18), 0 10px 28px rgba(0, 0, 0, 0.22);
+  color: #fff;
+  text-align: left;
+}
+
+.widget-sm {
+  width: 158px;
+  height: 158px;
+  padding: 13px 14px;
+}
+
+.widget-md {
+  width: 334px;
+  height: 158px;
+}
+
+.widget-cal {
+  background: rgba(28, 28, 30, 0.86);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+  backdrop-filter: blur(30px) saturate(1.6);
+}
+
+.cal-month {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #ff453a;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 17px;
+  text-align: center;
+}
+
+.cal-dow {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.cal-day.is-weekend {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.cal-day.is-today {
+  border-radius: 50%;
+  background: #ff453a;
+  color: #fff;
+}
+
+.widget-music {
+  gap: 1px;
+  background: linear-gradient(160deg, rgba(120, 100, 255, 0.55), rgba(255, 79, 139, 0.55)), rgba(40, 40, 50, 0.6);
+  -webkit-backdrop-filter: blur(30px) saturate(1.6);
+  backdrop-filter: blur(30px) saturate(1.6);
+}
+
+.wm-art {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 9px;
+  border-radius: 9px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  line-height: 0;
+}
+
+.wm-art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wm-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.wm-title,
+.wm-artist {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wm-title {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.wm-artist {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.wm-play {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  color: #fff;
+}
+
+.wm-play:hover {
+  background: rgba(255, 255, 255, 0.34);
+}
+
+.widget-feature {
+  justify-content: flex-end;
+  padding: 0;
+  background: #111;
+}
+
+.wf-cover,
+.wf-shade {
+  position: absolute;
+  inset: 0;
+  line-height: 0;
+}
+
+.wf-cover svg {
+  width: 100%;
+  height: 100%;
+}
+
+.wf-shade {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.62), transparent 60%);
+}
+
+.wf-text {
+  position: relative;
+  display: grid;
+  padding: 0 60px 14px 18px;
+}
+
+.wf-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+.wf-meta {
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.wf-open {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: #fff;
+}
+
+.wf-open:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+@media (max-height: 600px), (max-width: 1100px) {
+  .widget-feature {
+    display: none;
+  }
+}
+
+@media (max-height: 460px) {
+  #widgets {
+    display: none;
+  }
+}
+
+/* ---- Phones: an iPhone-style status bar and home screen replace the desktop -------- */
+
+#statusbar,
+#home {
+  display: none;
+}
+
+#statusbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--statusbar-h);
+  padding: 0 14px 0 28px;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: transform 500ms var(--ease-out), opacity 500ms ease;
+}
+
+body:not(.is-ready) #statusbar {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.sb-time {
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.sb-right {
+  display: flex;
+  gap: 2px;
+}
+
+.sb-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: #fff;
+}
+
+#home {
+  position: absolute;
+  top: calc(var(--statusbar-h) + 4px);
+  left: 0;
+  right: 0;
+  bottom: 112px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  gap: 22px 10px;
+  padding: 8px 20px 16px;
+  overflow-y: auto;
+}
+
+#home .widget {
+  grid-column: span 2;
+  width: auto;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.home-app {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+}
+
+.home-icon {
+  width: 64px;
+  height: 64px;
+  line-height: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  transition: transform 150ms ease;
+}
+
+.home-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Project covers masked to the app-icon shape. */
+.home-thumb {
+  width: 52px;
+  height: 52px;
+  margin: 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  filter: none;
+}
+
+.home-app:active .home-icon {
+  transform: scale(0.9);
+}
+
+.home-label {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 11.5px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+}
+
+@media (max-width: 759px) {
+  #widgets,
+  #icons {
+    display: none;
+  }
+
+  #statusbar {
+    display: flex;
+  }
+
+  #home {
+    display: grid;
+  }
+}

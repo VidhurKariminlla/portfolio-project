@@ -1,0 +1,265 @@
+/* Boot screen, lock screen, shut-down screen and sleep. */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+  transition: opacity 600ms ease;
+}
+
+#boot.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#boot[data-stage='blank'] {
+  background: #000;
+}
+
+.boot-stage {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+
+#boot[data-stage='boot'] .boot-boot,
+#boot[data-stage='lock'] .boot-lock,
+#boot[data-stage='signin'] .boot-signin,
+#boot[data-stage='off'] .boot-off,
+#boot[data-stage='sleep'] .boot-sleep {
+  display: grid;
+}
+
+/* The desktop eases in from slightly enlarged when the lock screen lifts. */
+#desktop {
+  transition: opacity 600ms ease, transform 700ms var(--ease-out);
+}
+
+body:not(.is-ready) #desktop {
+  opacity: 0;
+  transform: scale(1.03);
+}
+
+.boot-boot {
+  place-items: center;
+  align-content: center;
+  gap: 46px;
+  background: #000;
+}
+
+.boot-logo {
+  color: #fff;
+  line-height: 0;
+}
+
+.boot-bar {
+  width: 190px;
+  height: 5px;
+  border-radius: 3px;
+  background: #3a3a3c;
+  overflow: hidden;
+}
+
+.boot-bar > span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 3px;
+  background: #fff;
+}
+
+/* Step one: the wallpaper stays sharp, with a big clock over it. */
+.boot-lock {
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  padding: 11vh 16px 6vh;
+  background: rgba(0, 0, 0, 0.06);
+  color: #fff;
+  animation: boot-fade 600ms ease both;
+}
+
+.lock-unlock {
+  font-size: 13px;
+  opacity: 0.7;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  animation: lock-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes lock-breathe {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* Step two: the wallpaper blurs behind the account and the power buttons. */
+.boot-signin {
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  align-items: center;
+  padding: 0 16px 6vh;
+  background: rgba(0, 0, 0, 0.14);
+  -webkit-backdrop-filter: blur(44px) saturate(1.4);
+  backdrop-filter: blur(44px) saturate(1.4);
+  color: #fff;
+  animation: boot-fade 400ms ease both;
+}
+
+.signin-power {
+  display: flex;
+  gap: clamp(28px, 6vw, 56px);
+}
+
+.power-btn {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.power-btn:hover {
+  opacity: 1;
+}
+
+.power-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--glass-hi), 0 0 0 1px var(--glass-edge);
+}
+
+.lock-clock {
+  text-align: center;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.25);
+}
+
+.lock-date {
+  font-size: clamp(16px, 2.2vw, 22px);
+  font-weight: 600;
+  opacity: 0.88;
+}
+
+.lock-time {
+  font: 700 clamp(76px, 13vw, 128px) / 1 var(--font-display);
+  letter-spacing: -0.035em;
+  opacity: 0.92;
+}
+
+.lock-user {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #9d8bff 0%, #5b3fd6 100%);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.avatar-lock {
+  width: 76px;
+  height: 76px;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+  font-size: 27px;
+}
+
+.lock-name {
+  font-size: 17px;
+  font-weight: 600;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+.lock-login {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--glass-hi), 0 0 0 1px var(--glass-edge);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background 150ms ease;
+}
+
+.lock-login:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.lock-hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.boot-off {
+  place-items: center;
+  align-content: center;
+  gap: 14px;
+  background: #000;
+  color: #8e8e93;
+}
+
+.boot-power {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border: 1px solid #3a3a3c;
+  border-radius: 50%;
+  background: #1c1c1e;
+  color: #d1d1d6;
+  transition: background 150ms ease, color 150ms ease;
+}
+
+.boot-power:hover {
+  background: #2c2c2e;
+  color: #fff;
+}
+
+.boot-hint {
+  font-size: 12px;
+}
+
+.boot-sleep {
+  background: #000;
+  animation: boot-fade 800ms ease both;
+}
+
+@keyframes boot-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #boot,
+  #desktop,
+  .boot-lock,
+  .boot-signin,
+  .lock-unlock,
+  .boot-sleep {
+    transition: none;
+    animation: none;
+  }
+}

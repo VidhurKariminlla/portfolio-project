@@ -1,0 +1,247 @@
+/* The Dock: a frosted shelf of app icons with magnification, running dots, minimized
+   windows and the Trash. Icon size comes from System Settings (--dock-size). */
+#dock {
+  --dock-size: 50px;
+  position: fixed;
+  left: 50%;
+  bottom: 6px;
+  z-index: 8000;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: calc(var(--dock-size) + 14px);
+  padding: 6px 7px 8px;
+  border-radius: calc(var(--dock-size) * 0.34 + 6px);
+  background: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(30px) saturate(1.9);
+  backdrop-filter: blur(30px) saturate(1.9);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.45), 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 10px 30px rgba(0, 0, 0, 0.18);
+  transform: translateX(-50%);
+  transition: transform 550ms var(--ease-out), opacity 550ms ease;
+}
+
+:root[data-theme='dark'] #dock {
+  background: rgba(40, 40, 46, 0.42);
+  box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18), 0 0 0 0.5px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) #dock {
+    background: rgba(40, 40, 46, 0.42);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.18), 0 0 0 0.5px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+}
+
+body:not(.is-ready) #dock {
+  opacity: 0;
+  transform: translate(-50%, 150%);
+}
+
+.dock-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+.dock-item {
+  --size: var(--dock-size);
+  position: relative;
+  flex: none;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  background: none;
+  transition: width 110ms ease-out, height 110ms ease-out;
+}
+
+.dock-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.22));
+}
+
+.dock-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dock-item:active .dock-icon {
+  filter: brightness(0.65) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.22));
+}
+
+.dock-dot {
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.62);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+:root[data-theme='dark'] .dock-dot {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .dock-dot {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.dock-item.is-running .dock-dot {
+  opacity: 1;
+}
+
+.dock-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 12px);
+  padding: 3px 10px 4px;
+  border-radius: 6px;
+  background: var(--material-strong);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-pop);
+  color: var(--text);
+  font-size: 13px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-50%);
+  pointer-events: none;
+  transition: opacity 80ms ease;
+}
+
+.dock-item:hover .dock-tip,
+.dock-item:focus-visible .dock-tip {
+  opacity: 1;
+}
+
+.dock-item:focus-visible {
+  outline: none;
+}
+
+.dock-item:focus-visible .dock-icon {
+  border-radius: 12px;
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.dock-sep {
+  flex: none;
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 6px 2px;
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.25);
+}
+
+.dock-item.is-launching .dock-icon {
+  animation: dock-bounce 720ms ease-in-out;
+}
+
+@keyframes dock-bounce {
+  0%,
+  50%,
+  100% {
+    transform: none;
+  }
+
+  25% {
+    transform: translateY(-20px);
+  }
+
+  74% {
+    transform: translateY(-8px);
+  }
+}
+
+/* A minimized window: a tiny window thumbnail badged with its app icon. */
+.dock-thumb {
+  position: relative;
+  width: 88%;
+  height: 76%;
+  margin: 12% 6% 0;
+  border-radius: 5px;
+  background: var(--bg-win);
+  box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.3), 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.dock-thumb-bar {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 22%;
+  border-bottom: 1px solid var(--sep);
+  background: var(--bg-bar);
+}
+
+.dock-thumb-lines {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  top: 36%;
+  height: 34%;
+  background: repeating-linear-gradient(to bottom, var(--fill-2) 0 2px, transparent 2px 6px);
+}
+
+.dock-thumb-app {
+  position: absolute;
+  right: -4%;
+  bottom: -4%;
+  width: 52%;
+  height: 64%;
+}
+
+.dock-thumb-app svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Phones: an iPhone-style dock of four apps; everything else lives on the home screen. */
+@media (max-width: 759px) {
+  #dock {
+    --dock-size: 60px !important;
+    bottom: 10px;
+    gap: 6px;
+    height: 84px;
+    padding: 12px 12px;
+    border-radius: 32px;
+  }
+
+  .dock-group {
+    gap: 6px;
+  }
+
+  .dock-sep,
+  .dock-me,
+  .dock-mins,
+  .dock-item[data-app='launchpad'],
+  .dock-item[data-app='calculator'],
+  .dock-item[data-app='settings'],
+  .dock-item[data-app='terminal'],
+  .dock-item[data-app='trash-can'] {
+    display: none !important;
+  }
+
+  .dock-tip {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-item.is-launching .dock-icon {
+    animation: none;
+  }
+
+  #dock,
+  .dock-item {
+    transition: none;
+  }
+}

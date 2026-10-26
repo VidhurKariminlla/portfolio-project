@@ -1,0 +1,474 @@
+/* Translucent menu bar, pull-down menus, Control Center and notification banners. */
+#menubar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--menubar-h);
+  padding: 0 10px;
+  /* Translucent bar tinted by the wallpaper behind it, as on macOS. */
+  background: rgba(0, 0, 0, 0.1);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  backdrop-filter: blur(40px) saturate(1.8);
+  box-shadow: inset 0 -0.5px 0 rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 13.5px;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: transform 500ms var(--ease-out), opacity 500ms ease;
+}
+
+body:not(.is-ready) #menubar {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+.mb-left,
+.mb-right {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mb-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.mb-title.is-open {
+  background: rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mb-app-name {
+  font-weight: 700;
+}
+
+.mb-logo {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.mb-icon {
+  width: 32px;
+  justify-content: center;
+  padding: 0;
+}
+
+.mb-clock {
+  padding: 0 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.mb-passive {
+  pointer-events: none;
+}
+
+/* Battery: shown only where the browser reports a real level. */
+.mb-battery {
+  display: flex;
+  align-items: center;
+  padding: 0 7px;
+}
+
+.mb-batt-body {
+  position: relative;
+  width: 24px;
+  height: 11.5px;
+  padding: 1.5px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 3.5px;
+}
+
+.mb-batt-body::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: -3.5px;
+  width: 2px;
+  height: 4px;
+  border-radius: 0 1px 1px 0;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.mb-batt-fill {
+  display: block;
+  height: 100%;
+  border-radius: 1.5px;
+  background: #fff;
+}
+
+.mb-battery.is-charging .mb-batt-fill {
+  background: #32d74b;
+}
+
+.mb-battery.is-low .mb-batt-fill {
+  background: #ff453a;
+}
+
+/* ---- Pull-down menus --------------------------------------------------------------- */
+
+.menu {
+  position: fixed;
+  top: calc(var(--menubar-h) + 1px);
+  z-index: 9500;
+  min-width: 230px;
+  max-height: calc(100vh - var(--menubar-h) - 12px);
+  overflow-y: auto;
+  padding: 5px;
+  border-radius: 10px;
+  background: var(--material);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  backdrop-filter: blur(40px) saturate(1.8);
+  box-shadow: var(--shadow-pop);
+  color: var(--text);
+  font-size: 13px;
+  text-shadow: none;
+  animation: menu-in 120ms ease-out;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 24px;
+  padding: 0 14px 0 26px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: inherit;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.menu-item:not(.is-disabled):hover,
+.menu-item:not(.is-disabled):focus {
+  outline: none;
+  background: var(--accent);
+  color: #fff;
+}
+
+.menu-item.is-disabled {
+  color: var(--text-3);
+}
+
+.menu-check {
+  position: absolute;
+  left: 9px;
+  font-size: 12px;
+}
+
+.menu-icon {
+  display: inline-flex;
+  line-height: 0;
+}
+
+.menu-label {
+  flex: 1;
+}
+
+.menu-heading {
+  padding: 7px 14px 3px 26px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+
+.menu-sep {
+  height: 1px;
+  margin: 5px 10px;
+  background: var(--sep-strong);
+}
+
+/* ---- Control Center ----------------------------------------------------------------- */
+
+.menu-panel {
+  min-width: 0;
+  width: min(320px, calc(100vw - 16px));
+  padding: 10px;
+  border-radius: 16px;
+}
+
+.cc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.cc-tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--fill);
+  color: var(--text);
+  text-align: left;
+}
+
+.cc-tile:hover {
+  background: var(--fill-2);
+}
+
+.cc-tile-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--fill-2);
+}
+
+.cc-tile.is-on .cc-tile-icon {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cc-tile-name {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.cc-tile-state {
+  display: block;
+  font-size: 11.5px;
+  color: var(--text-2);
+}
+
+.cc-wide {
+  grid-column: 1 / -1;
+  padding: 10px 12px 12px;
+  border-radius: 12px;
+  background: var(--fill);
+}
+
+.cc-wide-label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.cc-seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--fill);
+}
+
+.cc-seg button {
+  height: 26px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.cc-music {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cc-music-art {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.cc-music-art svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cc-music-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.cc-music-text span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cc-music-btn {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fill-2);
+  color: var(--text);
+}
+
+.cc-link {
+  border: 0;
+  color: var(--text);
+  font-weight: 500;
+  text-align: left;
+}
+
+.cc-link:hover {
+  background: var(--fill-2);
+}
+
+.menu-key {
+  padding-left: 28px;
+  color: var(--text-3);
+  font-size: 12.5px;
+}
+
+.menu-item:not(.is-disabled):hover .menu-key,
+.menu-item:not(.is-disabled):focus .menu-key {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.menu-context {
+  top: 0;
+}
+
+.cc-seg button[aria-pressed='true'] {
+  background: var(--control);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+}
+
+/* ---- Notification banners ---------------------------------------------------------- */
+
+#notifications {
+  position: fixed;
+  top: calc(var(--menubar-h) + 10px);
+  right: 12px;
+  z-index: 9200;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(360px, calc(100vw - 24px));
+  pointer-events: none;
+}
+
+.notice {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: start;
+  gap: 12px;
+  padding: 12px 12px 12px 14px;
+  border-radius: 16px;
+  background: var(--material-strong);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  backdrop-filter: blur(40px) saturate(1.8);
+  box-shadow: var(--shadow-pop);
+  color: var(--text);
+  pointer-events: auto;
+  animation: notice-in 450ms var(--ease-spring) both;
+}
+
+.notice.is-leaving {
+  animation: notice-out 240ms ease forwards;
+}
+
+@keyframes notice-in {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@keyframes notice-out {
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+.notice-icon {
+  line-height: 0;
+}
+
+.notice-title {
+  font-weight: 600;
+}
+
+.notice-body {
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+
+.notice-close {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--fill-2);
+  color: var(--text-2);
+  opacity: 0;
+}
+
+.notice:hover .notice-close,
+.notice-close:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .notice-close {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .mb-date {
+    display: none;
+  }
+}
+
+/* Phones use the iPhone-style status bar instead (see desktop.css). */
+@media (max-width: 759px) {
+  #menubar {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notice,
+  .notice.is-leaving,
+  .menu {
+    animation: none;
+  }
+}

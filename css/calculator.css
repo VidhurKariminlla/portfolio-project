@@ -1,0 +1,181 @@
+/* Calculator (js/calculator.js): a dark rounded keypad in the macOS style, with orange
+   operator keys. Light appearance softens the window around it; the keypad stays dark. */
+
+.calc-app {
+  --calc-bg: #1c1c1e;
+  --calc-text: #ffffff;
+  --calc-num: #3a3a3c;
+  --calc-num-hover: #48484a;
+  --calc-fn: #5b5b5f;
+  --calc-fn-hover: #6c6c70;
+  --calc-op: #ff9f0a;
+  --calc-op-hover: #ffb340;
+  --calc-op-active-bg: #ffffff;
+  --calc-op-active-text: #ff9f0a;
+  --calc-gap: 8px;
+  --calc-font: 52px;
+
+  display: flex;
+  flex-direction: column;
+  padding: 4px 12px 12px;
+  background: var(--calc-bg);
+  color: var(--calc-text);
+  font-family: var(--font);
+}
+
+.calc-app .calc-display {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  height: 72px;
+  padding: 0 6px 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.calc-app .calc-value {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: var(--calc-font);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.calc-app .calc-pad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--calc-gap);
+}
+
+.calc-app .calc-key {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--calc-num);
+  color: var(--calc-text);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: default;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out), filter 160ms var(--ease-out);
+}
+
+.calc-app .calc-key:hover {
+  background: var(--calc-num-hover);
+}
+
+.calc-app .calc-fn {
+  background: var(--calc-fn);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.calc-app .calc-fn:hover {
+  background: var(--calc-fn-hover);
+}
+
+.calc-app .calc-op {
+  background: var(--calc-op);
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.calc-app .calc-op:hover {
+  background: var(--calc-op-hover);
+}
+
+/* The pending operator, as on the real Calculator. */
+.calc-app .calc-op.is-active {
+  background: var(--calc-op-active-bg);
+  color: var(--calc-op-active-text);
+}
+
+.calc-app .calc-wide {
+  grid-column: span 2;
+  aspect-ratio: auto;
+  justify-content: flex-start;
+  padding-left: 21px;
+}
+
+.calc-app .calc-key:active,
+.calc-app .calc-key.is-pressed {
+  filter: brightness(1.35);
+  transition-duration: 0ms;
+}
+
+.calc-app .calc-op:active,
+.calc-app .calc-op.is-pressed {
+  filter: brightness(1.15);
+}
+
+.calc-app .calc-key:focus {
+  outline: none;
+}
+
+.calc-app .calc-key:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Light appearance: the window chrome is light, so the keypad gets a soft graphite
+   surface rather than near-black, keeping the dark-keypad look without a hard seam. */
+:root[data-theme='light'] .calc-app {
+  --calc-bg: #2c2c2e;
+  --calc-num: #444446;
+  --calc-num-hover: #505053;
+  --calc-fn: #69696e;
+  --calc-fn-hover: #77777c;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .calc-app {
+    --calc-bg: #2c2c2e;
+    --calc-num: #444446;
+    --calc-num-hover: #505053;
+    --calc-fn: #69696e;
+    --calc-fn-hover: #77777c;
+  }
+}
+
+/* Full-screen on small viewports: center the keypad and let it grow, phone style. */
+.win.is-narrow .calc-app {
+  --calc-gap: 12px;
+  --calc-font: 72px;
+
+  position: absolute;
+  inset: 0;
+  justify-content: flex-end;
+  padding: 16px max(16px, calc((100% - 380px) / 2)) 24px;
+}
+
+.win.is-narrow .calc-app .calc-display {
+  height: auto;
+  min-height: 96px;
+  flex: 1;
+}
+
+.win.is-narrow .calc-app .calc-key {
+  font-size: 30px;
+}
+
+.win.is-narrow .calc-app .calc-wide {
+  padding-left: 30px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc-app .calc-key {
+    transition: none;
+  }
+}

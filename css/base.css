@@ -1,0 +1,288 @@
+/* Design tokens (light + dark), reset and scrollbars. */
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Segoe UI', Roboto, Inter, Arial, sans-serif;
+  --font-display: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', 'Segoe UI', Roboto, Inter, Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --menubar-h: 28px;
+  --statusbar-h: 44px;
+  --radius-win: 16px;
+  --radius-control: 6px;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1); /* expo-out: fast arrival, no overshoot */
+
+  /* Light appearance */
+  --accent: #007aff;
+  --accent-hover: #0068d9;
+  --accent-soft: rgba(0, 122, 255, 0.14);
+  --on-accent: #ffffff;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --text-3: #a1a1a6;
+  --bg-win: #ffffff;
+  --bg-bar: #f6f6f8;
+  --bg-side: rgba(236, 236, 241, 0.8);
+  --bg-sunken: #f2f2f6;
+  --bg-elev: #ffffff;
+  --sep: rgba(0, 0, 0, 0.09);
+  --sep-strong: rgba(0, 0, 0, 0.16);
+  --fill: rgba(0, 0, 0, 0.05);
+  --fill-2: rgba(0, 0, 0, 0.09);
+  --control: #ffffff;
+  --row-alt: #f7f7f9;
+  --material: rgba(246, 246, 248, 0.78);
+  --material-strong: rgba(250, 250, 252, 0.9);
+  --material-edge: rgba(255, 255, 255, 0.55);
+  --shadow-win: 0 0 0 0.5px rgba(0, 0, 0, 0.22), 0 26px 70px -10px rgba(0, 0, 0, 0.42), 0 8px 20px -8px rgba(0, 0, 0, 0.2);
+  --shadow-win-idle: 0 0 0 0.5px rgba(0, 0, 0, 0.18), 0 14px 34px -10px rgba(0, 0, 0, 0.28);
+  --shadow-pop: 0 0 0 0.5px rgba(0, 0, 0, 0.16), 0 14px 38px rgba(0, 0, 0, 0.22);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.08), 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.08), 0 14px 30px rgba(0, 0, 0, 0.16);
+  --light-off: #d6d6d8;
+  --caveat-bg: #fff7e5;
+  --caveat-edge: #f3d38c;
+  --caveat-text: #6b4a00;
+  --term-bg: rgba(28, 28, 30, 0.94);
+
+  /* Liquid-glass material for the Dock, widgets and lock-screen controls */
+  --glass: rgba(255, 255, 255, 0.16);
+  --glass-edge: rgba(255, 255, 255, 0.4);
+  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+
+  /* Wallpaper: dusk */
+  --sky: linear-gradient(180deg, #1f2d55 0%, #44478a 28%, #9b6a9e 55%, #ef9a8a 76%, #ffd3a1 94%);
+  --glow: rgba(255, 210, 160, 0.75);
+  --stars-opacity: 0;
+  --hill-3a: #9a7bb8;
+  --hill-3b: #6a579b;
+  --hill-2a: #5d4c8f;
+  --hill-2b: #3a3371;
+  --hill-1a: #2d2b5f;
+  --hill-1b: #17173a;
+  --name-fill: linear-gradient(180deg, rgba(255, 246, 236, 0.95) 0%, rgba(255, 214, 190, 0.7) 70%, rgba(255, 214, 190, 0.35) 100%);
+  --name-glow: rgba(255, 180, 140, 0.35);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --accent: #0a84ff;
+    --accent-hover: #3394ff;
+    --accent-soft: rgba(10, 132, 255, 0.22);
+    --text: #f5f5f7;
+    --text-2: #a1a1a6;
+    --text-3: #6e6e73;
+    --bg-win: #1e1e20;
+    --bg-bar: #2a2a2d;
+    --bg-side: rgba(40, 40, 44, 0.78);
+    --bg-sunken: #161618;
+    --bg-elev: #2c2c2e;
+    --sep: rgba(255, 255, 255, 0.09);
+    --sep-strong: rgba(255, 255, 255, 0.16);
+    --fill: rgba(255, 255, 255, 0.07);
+    --fill-2: rgba(255, 255, 255, 0.12);
+    --control: #3a3a3c;
+    --row-alt: #232326;
+    --material: rgba(40, 40, 44, 0.72);
+    --material-strong: rgba(44, 44, 48, 0.9);
+    --material-edge: rgba(255, 255, 255, 0.14);
+    --shadow-win: 0 0 0 1px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 26px 70px -10px rgba(0, 0, 0, 0.7);
+    --shadow-win-idle: 0 0 0 1px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 14px 34px -10px rgba(0, 0, 0, 0.55);
+    --shadow-pop: 0 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 14px 38px rgba(0, 0, 0, 0.5);
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 30px rgba(0, 0, 0, 0.5);
+    --light-off: #4a4a4d;
+    --caveat-bg: rgba(255, 196, 70, 0.1);
+    --caveat-edge: rgba(255, 196, 70, 0.35);
+    --caveat-text: #f3cf7c;
+    --glass: rgba(28, 28, 34, 0.34);
+    --glass-edge: rgba(255, 255, 255, 0.16);
+    --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+
+    --sky: linear-gradient(180deg, #04060f 0%, #0b1130 38%, #19204c 68%, #33305f 92%);
+    --glow: rgba(120, 140, 255, 0.22);
+    --stars-opacity: 0.85;
+    --hill-3a: #262b5e;
+    --hill-3b: #1a1e47;
+    --hill-2a: #161b40;
+    --hill-2b: #0f1331;
+    --hill-1a: #0c0f27;
+    --hill-1b: #05071a;
+    --name-fill: linear-gradient(180deg, rgba(205, 214, 255, 0.55) 0%, rgba(160, 172, 255, 0.28) 75%, rgba(160, 172, 255, 0.12) 100%);
+    --name-glow: rgba(110, 130, 255, 0.25);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --accent: #0a84ff;
+  --accent-hover: #3394ff;
+  --accent-soft: rgba(10, 132, 255, 0.22);
+  --text: #f5f5f7;
+  --text-2: #a1a1a6;
+  --text-3: #6e6e73;
+  --bg-win: #1e1e20;
+  --bg-bar: #2a2a2d;
+  --bg-side: rgba(40, 40, 44, 0.78);
+  --bg-sunken: #161618;
+  --bg-elev: #2c2c2e;
+  --sep: rgba(255, 255, 255, 0.09);
+  --sep-strong: rgba(255, 255, 255, 0.16);
+  --fill: rgba(255, 255, 255, 0.07);
+  --fill-2: rgba(255, 255, 255, 0.12);
+  --control: #3a3a3c;
+  --row-alt: #232326;
+  --material: rgba(40, 40, 44, 0.72);
+  --material-strong: rgba(44, 44, 48, 0.9);
+  --material-edge: rgba(255, 255, 255, 0.14);
+  --shadow-win: 0 0 0 1px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 26px 70px -10px rgba(0, 0, 0, 0.7);
+  --shadow-win-idle: 0 0 0 1px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(255, 255, 255, 0.07), 0 14px 34px -10px rgba(0, 0, 0, 0.55);
+  --shadow-pop: 0 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 14px 38px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 2px 4px rgba(0, 0, 0, 0.4), 0 14px 30px rgba(0, 0, 0, 0.5);
+  --light-off: #4a4a4d;
+  --caveat-bg: rgba(255, 196, 70, 0.1);
+  --caveat-edge: rgba(255, 196, 70, 0.35);
+  --caveat-text: #f3cf7c;
+  --glass: rgba(28, 28, 34, 0.34);
+  --glass-edge: rgba(255, 255, 255, 0.16);
+  --glass-hi: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+
+  --sky: linear-gradient(180deg, #04060f 0%, #0b1130 38%, #19204c 68%, #33305f 92%);
+  --glow: rgba(120, 140, 255, 0.22);
+  --stars-opacity: 0.85;
+  --hill-3a: #262b5e;
+  --hill-3b: #1a1e47;
+  --hill-2a: #161b40;
+  --hill-2b: #0f1331;
+  --hill-1a: #0c0f27;
+  --hill-1b: #05071a;
+  --name-fill: linear-gradient(180deg, rgba(205, 214, 255, 0.55) 0%, rgba(160, 172, 255, 0.28) 75%, rgba(160, 172, 255, 0.12) 100%);
+  --name-glow: rgba(110, 130, 255, 0.25);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font: 13px/1.4 var(--font);
+  color: var(--text);
+  background: #1f2d55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  user-select: none;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: default;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p,
+h1,
+h2,
+h3,
+ul,
+dl,
+dd {
+  margin: 0;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.ico {
+  display: inline-flex;
+  flex: none;
+  line-height: 0;
+}
+
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  outline-offset: 1px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+noscript {
+  position: fixed;
+  inset: 0;
+  z-index: 40000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #000;
+  color: #fff;
+  text-align: center;
+}
+
+/* Thin overlay-style scrollbars */
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 3px solid transparent;
+  border-radius: 8px;
+  background: var(--fill-2) padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-3) padding-box;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--fill-2) transparent;
+  }
+}

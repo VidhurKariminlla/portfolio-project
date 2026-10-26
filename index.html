@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vidhur Kariminlla · Vidhur OS</title>
+  <meta name="description" content="Portfolio of Vidhur Kariminlla, a student developer building web apps and lab hardware, presented as a macOS-style desktop.">
+  <meta name="theme-color" content="#1f2d55">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36e'/%3E%3Cstop offset='.5' stop-color='%23ff6f91'/%3E%3Cstop offset='1' stop-color='%237b6cff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M32 4l26 28-26 28L6 32z' fill='url(%23g)'/%3E%3Cpath d='M32 4l10 28-10 28-10-28z' fill='%23fff' fill-opacity='.22'/%3E%3C/svg%3E">
+  <!-- Bump ?v= on every deploy so browsers never serve stale CSS or JS. -->
+  <link rel="stylesheet" href="css/base.css?v=3">
+  <link rel="stylesheet" href="css/desktop.css?v=3">
+  <link rel="stylesheet" href="css/window.css?v=3">
+  <link rel="stylesheet" href="css/menubar.css?v=3">
+  <link rel="stylesheet" href="css/dock.css?v=3">
+  <link rel="stylesheet" href="css/apps.css?v=3">
+  <link rel="stylesheet" href="css/overlays.css?v=3">
+  <link rel="stylesheet" href="css/settings.css?v=3">
+  <link rel="stylesheet" href="css/music.css?v=3">
+  <link rel="stylesheet" href="css/blockcraft.css?v=3">
+  <link rel="stylesheet" href="css/notes.css?v=3">
+  <link rel="stylesheet" href="css/calculator.css?v=3">
+  <link rel="stylesheet" href="css/boot.css?v=3">
+</head>
+<body>
+  <div id="wallpaper" aria-hidden="true">
+    <div class="wall-photo"></div>
+    <div class="wall-hills">
+    <div class="wall-stars"></div>
+    <div class="wall-glow"></div>
+    <svg class="hill hill-3" viewBox="0 0 1440 320" preserveAspectRatio="none" focusable="false">
+      <defs><linearGradient id="hill3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--hill-3a)"/><stop offset="1" style="stop-color: var(--hill-3b)"/></linearGradient></defs>
+      <path d="M0 200C170 140 320 110 520 140S860 230 1060 170 1340 80 1440 110V320H0Z" fill="url(#hill3)"/>
+    </svg>
+    <svg class="hill hill-2" viewBox="0 0 1440 320" preserveAspectRatio="none" focusable="false">
+      <defs><linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--hill-2a)"/><stop offset="1" style="stop-color: var(--hill-2b)"/></linearGradient></defs>
+      <path d="M0 160C200 110 380 190 600 180S980 100 1180 140 1380 200 1440 180V320H0Z" fill="url(#hill2)"/>
+    </svg>
+    <div class="wall-name"></div>
+    <svg class="hill hill-1" viewBox="0 0 1440 320" preserveAspectRatio="none" focusable="false">
+      <defs><linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color: var(--hill-1a)"/><stop offset="1" style="stop-color: var(--hill-1b)"/></linearGradient></defs>
+      <path d="M0 130C260 50 520 80 760 120S1200 190 1440 100V320H0Z" fill="url(#hill1)"/>
+    </svg>
+    </div>
+  </div>
+
+  <main id="desktop" aria-label="Desktop">
+    <div id="widgets" role="group" aria-label="Widgets"></div>
+    <div id="icons" role="group" aria-label="Desktop icons"></div>
+    <div id="home" role="group" aria-label="Home screen"></div>
+    <div id="windows"></div>
+  </main>
+
+  <nav id="menubar" aria-label="Menu bar"></nav>
+  <header id="statusbar" aria-label="Status bar"></header>
+  <div id="dock" role="toolbar" aria-label="Dock"></div>
+  <div id="notifications" aria-live="polite"></div>
+
+  <div id="boot" data-stage="boot">
+    <div class="boot-stage boot-boot">
+      <span class="boot-logo"></span>
+      <div class="boot-bar" role="progressbar" aria-label="Starting up"><span></span></div>
+    </div>
+    <div class="boot-stage boot-lock">
+      <div class="lock-clock">
+        <p class="lock-time"></p>
+        <p class="lock-date"></p>
+      </div>
+      <p class="lock-unlock">Click anywhere to unlock</p>
+    </div>
+    <div class="boot-stage boot-signin">
+      <div class="lock-user">
+        <span class="avatar avatar-lock lock-avatar" aria-hidden="true"></span>
+        <p class="lock-name"></p>
+        <button class="lock-login" type="button">
+          <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 4.5v5a2 2 0 0 1-2 2H5M8 8.5l-3 3 3 3"/></svg>
+          Sign In
+        </button>
+        <p class="lock-hint">Press Enter to sign in. Turn your sound on.</p>
+      </div>
+      <div class="signin-power">
+        <button class="power-btn" type="button" data-power="sleep"><span class="power-icon"><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 12.2A6.6 6.6 0 0 1 7.8 4 6.6 6.6 0 1 0 16 12.2z"/></svg></span>Sleep</button>
+        <button class="power-btn" type="button" data-power="restart"><span class="power-icon"><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.8 10A5.8 5.8 0 1 1 13.9 5.7M14 2.8v3.4h-3.4"/></svg></span>Restart</button>
+        <button class="power-btn" type="button" data-power="shutdown"><span class="power-icon"><svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M10 2.8v6.4M6.2 5a6.3 6.3 0 1 0 7.6 0"/></svg></span>Shut Down</button>
+      </div>
+    </div>
+    <div class="boot-stage boot-off">
+      <button class="boot-power" type="button" aria-label="Start up">
+        <svg viewBox="0 0 20 20" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M10 2.5v7M6 4.8a6.5 6.5 0 1 0 8 0"/></svg>
+      </button>
+      <p class="boot-hint">Click to start up</p>
+    </div>
+    <div class="boot-stage boot-sleep" aria-label="Sleeping. Click to wake."></div>
+  </div>
+
+  <noscript>This portfolio is an interactive desktop and needs JavaScript turned on.</noscript>
+
+  <script src="js/dom.js?v=3"></script>
+  <script src="js/theme.js?v=3"></script>
+  <script src="js/prefs.js?v=3"></script>
+  <script src="js/data.js?v=3"></script>
+  <script src="js/icons.js?v=3"></script>
+  <script src="js/audio.js?v=3"></script>
+  <script src="js/menu.js?v=3"></script>
+  <script src="js/windows.js?v=3"></script>
+  <script src="js/registry.js?v=3"></script>
+  <script src="js/dock.js?v=3"></script>
+  <script src="js/finder.js?v=3"></script>
+  <script src="js/apps.js?v=3"></script>
+  <script src="js/terminal.js?v=3"></script>
+  <script src="js/settings.js?v=3"></script>
+  <script src="js/spotlight.js?v=3"></script>
+  <script src="js/launchpad.js?v=3"></script>
+  <script src="js/notifcenter.js?v=3"></script>
+  <script src="js/music-engine.js?v=3"></script>
+  <script src="js/music.js?v=3"></script>
+  <script src="js/blockcraft-world.js?v=5"></script>
+  <script src="js/blockcraft-gl.js?v=5"></script>
+  <script src="js/blockcraft.js?v=5"></script>
+  <script src="js/notes-store.js?v=3"></script>
+  <script src="js/notes-editor.js?v=3"></script>
+  <script src="js/notes.js?v=3"></script>
+  <script src="js/calculator.js?v=3"></script>
+  <script src="js/desktop.js?v=3"></script>
+  <script src="js/applemenu.js?v=3"></script>
+  <script src="js/menubar.js?v=3"></script>
+  <script src="js/boot.js?v=3"></script>
+  <script src="js/main.js?v=3"></script>
+</body>
+</html>
